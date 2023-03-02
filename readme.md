@@ -1,7 +1,23 @@
 
-# Setup
 
-## Setting Up Keys
+# Setting Up Python Environment
+
+The tool uses python=3.8
+
+To set up your environment, follow the instructions below:
+
+1. Install Python 3.8
+2. Navigate to the root folder of the project.
+3. Install the required dependencies using the following command:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Note: It is recommended to use a virtual environment to manage your dependencies.
+
+
+# Setting Up Keys
 
 To set up your keys, follow the instructions below:
 
@@ -14,7 +30,7 @@ To set up your keys, follow the instructions below:
 
 Note: The `keys.yml` file contains private information and should not be committed to version control. It has been added to the `.gitignore` file for security reasons.
 
-### Accessing Keys
+## Accessing Keys
 
 To access the keys within your application, you can use a YAML parsing library to read the contents of the `keys.yml` file.
 
