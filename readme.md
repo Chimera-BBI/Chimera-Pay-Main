@@ -17,6 +17,17 @@ pip3 install -r requirements.txt
 Note: It is recommended to use a virtual environment to manage your dependencies.
 
 
+## Setup using Anaconda
+
+```
+conda create -n chimere_pay python=3.8 
+
+conda activate chimere_pay
+
+pip install -r requirements.txt
+
+```
+
 # Setting Up Keys
 
 To set up your keys, follow the instructions below:

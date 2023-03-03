@@ -1,1 +1,5 @@
-yaml
+notebook
+numpy
+pandas
+web3
+py-solc-x
