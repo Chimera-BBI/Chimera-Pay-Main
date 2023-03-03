@@ -58,3 +58,13 @@ api_key = keys['api_key']
 ```
 Make sure to replace 'api_key' with the actual name of the key you want to access.
 
+# Importing OpenZiplin Lib
+
+in the repositor `./smart_contract` do a git clone to get nessesary contracts
+
+```git
+
+git clone https://github.com/OpenZeppelin/openzeppelin-contracts 
+
+```
+
