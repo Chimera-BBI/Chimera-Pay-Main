@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <div class="container mt-5 text-light">
+          <form method="POST" class="form-register"  enctype="multipart/form-data"  id="InputForm">
+            <div class="form-group">
+              <label for="phoneNumber">User Login/SignUp</label>
+              <input type="tel" class="form-control" name="phoneNumber" placeholder="Enter phone number">
+              <br>
+              <input type="password" class="form-control" name="OTP" placeholder="Enter the OTP" style="display:none;">
+            </div>
+            <input type="submit" formaction={{url_for("VerifyOTP")}} value="Submit OTP"   title="Submit OTP"    class="btn btn-primary" name="submit-otp"      style="display:none;"   />
+
+            <!-- <button type="buttom" class="btn btn-primary" name="submit-otp" style="display:none;">Submit OTP</button> -->
+          </form>
+          <button class="btn btn-primary" name="submit-ph-no" onclick="submit_phone_no()">Submit Phone Number</button>
+
+        </div>
+ 
+
+
+
+
+<script>
+
+
+Class_Element = function(name){
+  return document.getElementsByName(name)[0];
+};
+
+function submit_phone_no()
+{
+
+    var form        =   $(document.getElementById("InputForm"));
+    var actionUrl   =   '{{url_for("GetOtp")}}'     ;
+
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        async: false,
+        data: form.serialize(), // serializes the form's elements.
+        success: function(data)
+        {
+          console.log(data);
+            //alert(data); // show response from the php script.
+        }
+    });
+
+
+  Class_Element("submit-ph-no").style.display = "none";
+  Class_Element("submit-otp").style.display = "";
+  Class_Element("OTP").style.display = "";
+  Class_Element("phoneNumber").setAttribute("readonly","");
+  Class_Element("phoneNumber").style    = "border:0px";
+
+
+}
+
+
+
+
+</script>
+
+{% endblock %}

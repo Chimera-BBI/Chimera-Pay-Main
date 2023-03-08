@@ -1,3 +1,65 @@
-key_name:
-  private_key : pri_key 
-  public_key  : pub_key
+# List of blockchain keys
+Blockchain_Keys:
+  # Ganache test account 1
+  ganache_test1:
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+  # Ganache test account 2
+  ganache_test2:
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+  # Minter address
+  minter_address:
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+  # LP address
+  LP_address: 
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+  # Intermediate address for USD
+  Intermidiate_address_USD:
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+  # Intermediate address for INR
+  Intermidiate_address_INR:
+    # Private key
+    private_key : "REDACTED"
+    # Public key
+    public_key  : "REDACTED"
+
+# Smart contract addresses
+Smart_Contract_Address:
+  # Chimere Dollars contract address
+  Chimere_Dollars : "REDACTED"
+  # Chimere Rupee contract address
+  Chimere_Rupee   : "REDACTED"
+
+# Chimere AWS database credentials
+Chimere_Aws_database :
+  # Host name
+  host : "REDACTED"
+  # Port number
+  port : "REDACTED"
+  # Postgres database name
+  postgres_db : "REDACTED"
+  # Database name
+  database : "REDACTED"
+  # Database username
+  user  : "REDACTED"
+  # Database password
+  password : "REDACTED"

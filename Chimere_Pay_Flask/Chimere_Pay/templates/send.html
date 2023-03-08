@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="container mt-5 text-light">
+        <h1>Ethereum Mobile Payments</h1>
+        <form id="Send_Crypto" method="POST" class="form-register"  enctype="multipart/form-data" >
+            <div class="form-group">
+                <label for="to_address">To (Mobile Phone Number):</label>
+                <input type="text" class="form-control" id="to_address" name="to_address" value="">
+            </div>
+            <div class="form-group">
+                <label for="value">Value (In Eth):</label>
+                <input type="text" class="form-control" id="value" name="cvalue" value="">
+                <!-- <input type="submit" formaction={{url_for("GetAddress")}} value="Submit OTP"   title="Submit OTP"    class="btn btn-primary" name="submit-otp"   /> -->
+
+            </div>
+            <!-- <button type="submit" class="btn btn-primary" id="transfer_button">Transfer</button> -->
+            <!-- <button class="sendEthButton btn btn-primary">Send Eth</button> -->
+
+        </form>
+        <button class="sendEthButton btn" style="color: gold; background:black">Send Eth</button>
+    </div>
+
+    <div class="container mt-5 text-light">
+        Balance: {{balance}}
+        <br>
+        Eth Address: {{session["Recieving Address"]}}
+        <br>
+        Phone Number: {{session["phone_number"]}}
+        <br>
+        <br>
+
+        <a href="{{url_for('logout')}}" style="color: grey; background:black;"><u>Logout</u></a>
+    <!-- <button type = "button" class="btn" style="color: red; background:black">Logout</button> -->
+
+    </div>
+
+
+
+    <script>
+
+
+        // get parameters
+
+        function get_send_parameters(accounts,send_to,send_value) {
+
+            para = {
+                // Set the 'from' address to the first account in the list
+                from: accounts[0],
+                // Set the 'to' address
+                to: send_to,
+                // Set the value to send in wei
+                value: send_value,
+                // Set the gas price in wei
+                gasPrice: '0x09184e72a000',
+                // Set the gas limit
+                gas: '0x2710',
+
+            };
+
+            return para
+
+        }
+
+
+        function GetAddress()
+        {
+            var form        =   $(document.getElementById("Send_Crypto"));
+            var actionUrl   =   '{{url_for("GetAddress")}}'     ;
+
+            data = "";
+
+            $.ajax({
+                type: "POST",
+                url: actionUrl,
+                async: false,
+                data: form.serialize(), // serializes the form's elements.
+                success: function(address)
+                {
+                //console.log(data);
+                    //alert(data); // show response from the php script.
+                data = address
+                }
+            });
+
+            return data
+        }
+
+
+
+        function SendEth(accounts) {
+
+            //send_to = document.getElementsByName("to_address")[0].value;
+
+
+            send_to = GetAddress()
+
+            send_value = document.getElementsByName("cvalue")[0].value;
+            send_value =  "0x" + Web3.utils.toBN(Web3.utils.toWei(send_value, "ether")).toString(16);
+            para = get_send_parameters(accounts,send_to = send_to,send_value = send_value);
+            // Send a request to the Ethereum network to send a transaction
+
+            ethereum.request({ method: 'eth_sendTransaction', params: [para], })
+                // Log the transaction hash if the request is successful
+                .then((txHash) => console.log(txHash))
+                // Log the error if the request fails
+                .catch((error) => console.error);
+
+        }
+
+
+
+
+
+        const sendEthButton = document.querySelector('.sendEthButton');
+
+
+
+        // Add click event listener to the send Ethereum button
+        sendEthButton.addEventListener('click', () => { SendEth(accounts); });
+
+
+
+
+
+
+
+    </script>
+
+{% endblock %}
