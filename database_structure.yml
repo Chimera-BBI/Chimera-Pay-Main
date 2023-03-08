@@ -1,0 +1,34 @@
+# This is a YAML file that describes the database schema consisting of three tables: USER_BALANCE, USER_TRANSACTIONS, and USER_DETAILS.
+
+USER_BALANCE: # This table stores the balance information of each user
+  Phone_Number: "VARCHAR(15)" # The phone number of the user which serves as the primary key
+  BALANCE: "NUMERIC(305)" # The balance of the user which is stored as a numeric value with a maximum precision of 305 digits
+  CURRENCY: "TEXT" # The currency type of the balance, stored as text.
+
+USER_TRANSACTIONS: # This table stores the details of each transaction made by the users
+  transaction_ID: Text PRIMARYKEY # Unique transaction ID which serves as the primary key and is stored as text
+  FROM_ID: TEXT # The phone number of the user who initiated the transaction
+  TO_ID: TEXT # The phone number of the user who received the transaction
+  AMOUNT_SEND: NUMERIC(255) # The amount sent in the transaction, stored as a numeric value with a maximum precision of 255 digits
+  SEND_CURRENCY: TEXT # The currency type of the amount sent, stored as text
+  RECIEVE_CURRENCY: TEXT # The currency type of the amount received, stored as text
+  SWAP_FEE_PER: NUMERIC(105) # The percentage of the swap fee, stored as a numeric value with a maximum precision of 105 digits
+  SWAP_FEE: NUMERIC(255) # The amount of swap fee, stored as a numeric value with a maximum precision of 255 digits
+  AMOUNT_RECIEVED: NUMERIC(255) # The amount received in the transaction, stored as a numeric value with a maximum precision of 255 digits
+  FIAT_RECIEVED: TEXT # The fiat currency type of the amount received, stored as text
+  MINT_ADDRESS: TEXT # The mint address of the transaction, stored as text
+  SWAP_ADDRESS: TEXT # The swap address of the transaction, stored as text
+  SEND_ADDRESS: TEXT # The send address of the transaction, stored as text
+  BURN_ADDRESS: TEXT # The burn address of the transaction, stored as text
+  FIAT_SENT: TEXT # The fiat currency type of the amount sent, stored as text
+  DATE_TIME: TIMESTAMPDEFAULTNOW() # The date and time of the transaction, stored as a timestamp with the default value set to the current date and time
+  Exchange_Rate: NUMERIC(105) # The exchange rate used for the transaction, stored as a numeric value with a maximum precision of 105 digits
+
+USER_DETAILS: # This table stores the personal details of each user
+  Phone_Number: VARCHAR(15) # The phone number of the user which serves as the primary key and is stored as a string with a maximum length of 15 characters
+  Name: VARCHAR(50) # The name of the user, stored as a string with a maximum length of 50 characters
+  Email: VARCHAR(100) # The email of the user, stored as a string with a maximum length of 100 characters
+  Address: VARCHAR(200) # The address of the user, stored as a string with a maximum length of 200 characters
+  DOB: DATE # The date of birth of the user, stored as a date data type
+  Gender: VARCHAR(10) # The gender of the user, stored as a string with a maximum length of 10 characters
+  Picture: BYTEA # The profile picture of the

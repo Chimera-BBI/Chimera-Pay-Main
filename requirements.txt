@@ -3,3 +3,5 @@ numpy
 pandas
 web3
 py-solc-x
+# psycopg2       # windows implementaion
+psycopg2-binary # linux and mac implemenation
