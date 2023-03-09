@@ -1,59 +1,31 @@
+from .Database import postgres_api as db
+
+
+
 def sign_up_user(phone_number):
-
-   """
-    Registers a new user with the specified phone number in the Cognito user pool.
-    
-    Parameters:
-        - phone_number (str): the phone number of the user to be registered
-    
-    Returns:
-        None
-    """
-   sign_up_dict = {
-
-      "ClientId": client_ID,
-      "Password": "null_password",
-      "Username": phone_number,
-      "ValidationData": [ 
-         { 
-            "Name": "phone_number",
-            "Value": phone_number
-         }
-      ]
-   }
-
-   # Use the client to initiate the OTP request
-   response = client.sign_up(**sign_up_dict)
-
+   
+   data = db.execute_enter_data(table_name="USER_DETAILS",input_dict={"Phone_Number":phone_number})
+   data = db.execute_enter_data(table_name="USER_BALANCE",input_dict={"Phone_Number":phone_number})
+   return 1
 
 def start_authentication(phone_number):
 
-   initiate_auth_dict = {
+   data = db.execute_get_data(table_name="USER_DETAILS",column_names=["*"],where_dict={"Phone_Number":phone_number})
+   if len(data)<1:
+      sign_up_user(phone_number)
 
-      "AuthFlow": "CUSTOM_AUTH",
-      "AuthParameters": { 
-         "USERNAME" : phone_number,
-         "PASSWORD":"null_password" 
-      },
-      "ClientId": client_ID,
-   }
+   # authentication_key = generate_otp(phone_number)
 
-   response = client.initiate_auth(**initiate_auth_dict)
+   authentication_key = "sample_auth_mech"
 
-   return response["Session"]
+   return authentication_key
 
+def verify_otp(phone_number,auth_key,otp):
+   
+   # correct_otp = fetch_otp(auth_key)
+   correct_otp = "123456"
 
-def verify_otp(phone_number,session_var,answer="opensesame"):
-   response_to_auth = {
-      "ChallengeName": "CUSTOM_CHALLENGE",
-      "ChallengeResponses": { 
-         "USERNAME" : phone_number,
-         "ANSWER"      : answer 
-      },
-      "ClientId": client_ID,
-      "Session": session_var
-   }
-
-   response = client.respond_to_auth_challenge(**response_to_auth)
-
-   return response
+   if correct_otp == otp:
+      return 1
+   
+   return -1

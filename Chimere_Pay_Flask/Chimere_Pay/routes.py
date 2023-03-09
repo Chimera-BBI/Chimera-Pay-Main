@@ -3,10 +3,10 @@ from Chimere_Pay import app
 from .Modules import LoginModule
 from flask import render_template
 
-from web3 import Web3
+# from web3 import Web3
 
-from .Modules.Database import postgres_api
-from .Modules.session_check import SessionCheck
+from .Modules.Database import postgres_api as db
+# from .Modules.session_check import SessionCheck
 
 
 import requests
@@ -72,6 +72,22 @@ def add_header(r):
 
 
 
+def user_details_update():
+    columns     = ["Name","Email","Profile_Data_Complete","AML_Complete"]
+    values      = db.execute_get_data(table_name="USER_DETAILS",column_names=columns,where_dict={"Phone_Number":session["Phone_Number"]})
+    values      = values[0]
+    for i in range(len(columns)):
+        session[columns[i]] = values[i]
+    
+    columns     = ["BALANCE","CURRENCY"]
+    values      = db.execute_get_data(table_name="USER_BALANCE",column_names=columns,where_dict={"Phone_Number":session["Phone_Number"]})
+    if len(values)>0:
+        values = values[0]
+        for i in range(len(columns)):
+            session[columns[i]] = values[i]
+    else:
+        session[columns[0]] = None
+
 
 
 # @app.route("/get-started")
@@ -92,15 +108,8 @@ def GetOtp():
 
     status = "Failed"
 
-    try:
-        key = LoginModule.start_authentication(data["phoneNumber"])
-        status = "Already Exists"
-    except:
-        LoginModule.sign_up_user(data["phoneNumber"])
-        key = LoginModule.start_authentication(data["phoneNumber"])
-        status = "New User Created"
-
-
+    key = LoginModule.start_authentication(data["phoneNumber"])
+    status = "Already Exists"
     
     session["Authentication Key"] = key
 
@@ -113,24 +122,91 @@ def VerifyOTP():
     data = request.form.to_dict()
 
     phone_number    = data["phoneNumber"]
-    session_var     = session["Authentication Key"] 
-    answer          = data["OTP"]
-    results         = LoginModule.verify_otp(phone_number,session_var,answer)
+    auth_key        = session["Authentication Key"] 
+    otp             = data["OTP"]
+    result          = LoginModule.verify_otp(phone_number,auth_key,otp)
     session["Authentication Key"] = ""
 
     # raise Exception("Test")
 
-    if "AuthenticationResult" in results:
-        access_token    = results["AuthenticationResult"]["AccessToken"]
-        resp            = make_response(redirect(url_for('send'),302))
+    if result==1:
+        
+        access_token        = create_access_token(identity=str(phone_number))
+        resp                = make_response(redirect(url_for('user_profile'),302)) # change this to send
         set_access_cookies(resp,access_token)
-        session["phone_number"] = phone_number
+        session["Phone_Number"] = phone_number
+        user_details_update()
+
         return resp,302
     
-    # return "OTP Not Valid"
     flash("OTP Not Valid",'alert')
     return redirect(url_for("login"))
 
+@app.route("/FillUserProfile", methods=['GET','POST'])
+def user_profile():
+
+    columns = ["Name","Email","Address","DOB","Gender"]
+
+    if request.method == "POST":
+        data = request.form.to_dict()
+
+        input_dict = {}
+        for i in columns:
+            input_dict[i] = data[i]
+
+        test = db.execute_enter_data(table_name="USER_DETAILS",input_dict=input_dict,update_table=True,where_dict={"Phone_Number":session["Phone_Number"]})
+
+        if test==1:
+            print("update user profile")
+    
+        user_details_update()
+
+        return redirect(url_for("connect_bank"))
+    
+    return render_template("user_profile.html") 
+
+@app.route("/ConnectBank", methods = ["GET","POST"])
+def connect_bank():
+
+    if request.method == "POST":
+        data = request.form.to_dict()
+        input_dict = {"BALANCE":10000}
+        input_dict["Currency"] = data["Currency"]
+
+        test = db.execute_enter_data(table_name="USER_BALANCE",input_dict=input_dict,update_table=True,where_dict={"Phone_Number":session["Phone_Number"]})
+
+        if test==1:
+            print("update user balance")
+            test2 = db.execute_enter_data(table_name="USER_DETAILS",input_dict={"AML_Complete":"TRUE"},update_table=True,where_dict={"Phone_Number":session["Phone_Number"]})
+
+
+        user_details_update()
+
+        return redirect(url_for("connect_bank"))
+        
+    return render_template("connect_bank.html")
+
+@app.route("/AML", methods = ["GET","POST"])
+def AML_Data():
+
+    if request.method == "POST":
+
+        test = db.execute_enter_data(table_name="USER_BALANCE",input_dict=input_dict,update_table=True,where_dict={"Phone_Number":session["Phone_Number"]})
+
+        if test==1:
+            print("update user balance")
+
+        user_details_update()
+
+        return redirect(url_for("send"))
+        
+    return render_template("complete_aml.html")
+
+
+@app.route("/send")
+def send():
+    # balance = get_balance_eth(session["Recieving Address"])
+    return render_template("send.html",balance=5000)
 
 
 # @app.route("/Update-Recieving-Account", methods=['GET' , 'POST'])

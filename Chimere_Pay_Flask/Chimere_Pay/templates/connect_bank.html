@@ -1,0 +1,22 @@
+
+
+{% extends "layout.html" %}
+{% block content %}
+
+
+        <div class="container mt-5 text-light">
+          <form method="POST" class="form-register"  enctype="multipart/form-data"  id="connect_to_bank">
+            <div class="form-group">
+              <label for="Currency">Choose Currency</label>
+              <select id="Currency" name="Currency" class="form-control">
+                <option value="INR">INR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+            <input type="submit" formaction={{url_for("connect_bank")}} value="Submit OTP"   title="Submit User Details"    class="btn btn-primary" name="submit-user-details"   />
+          </form>
+
+        </div>
+ 
+
+{% endblock %}

@@ -2,7 +2,7 @@ import psycopg2.pool
 
 from Chimere_Pay import app
 
-aws_keys = app.config['aws_keys']
+aws_keys = app.config['Chimere_Aws_database']
 
 pool = psycopg2.pool.SimpleConnectionPool(1, 20,
                                             host=aws_keys["host"],
@@ -42,7 +42,7 @@ def execute_enter_data( table_name:str,
     """
     if update_table:
 
-        set_query = " , ".join(map(lambda x: rf"{x} = {input_dict[x]}",input_dict.keys()))
+        set_query = " , ".join(map(lambda x: rf"{x} = '{input_dict[x]}'",input_dict.keys()))
 
         query = f"UPDATE {table_name} SET {set_query}"
 

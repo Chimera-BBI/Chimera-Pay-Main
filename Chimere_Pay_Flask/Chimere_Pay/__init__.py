@@ -5,14 +5,14 @@ import yaml
 from datetime import timedelta
 
 
-with open('../../keys.yml', 'r') as file:
+with open('../keys.yml', 'r') as file:
     keys = yaml.safe_load(file)
 
 Blockchain_Keys                         = keys['Blockchain_Keys']
 Chimere_Aws_database                    = keys['Chimere_Aws_database']
 Smart_Contract_Address                  = keys['Smart_Contract_Address']
 
-with open('../../database_structure.yml', 'r') as file:
+with open('../database_structure.yml', 'r') as file:
     db_structure = yaml.safe_load(file)
 
 

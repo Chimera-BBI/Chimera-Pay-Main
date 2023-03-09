@@ -1,0 +1,16 @@
+
+
+{% extends "layout.html" %}
+{% block content %}
+
+
+        <div class="container mt-5 text-light">
+          <form method="POST" class="form-register"  enctype="multipart/form-data"  id="Update_Recieving_Account">
+            <input type="submit" formaction={{url_for("AML_Data")}} value="Submit OTP"   title="Submit User Details"    class="btn btn-primary" name="submit-user-details"   />
+        </form>
+          <button class="btn btn-primary" name="Connect-Wallet">Connect Wallet</button>
+
+        </div>
+ 
+
+{% endblock %}

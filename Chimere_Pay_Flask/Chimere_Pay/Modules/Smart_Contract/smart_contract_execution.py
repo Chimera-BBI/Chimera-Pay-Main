@@ -2,6 +2,8 @@
 # infura_url = "https://goerli.ethereum.coinbasecloud.net"
 # # Set the API key and username to use for authentication
 # # These are test keys and will be deleted
+# api_key = ""
+# username = ""
 
 # #Create a session with username and password
 # sessionx = requests.Session()
